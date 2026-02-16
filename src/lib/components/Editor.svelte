@@ -4,7 +4,13 @@
 	import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view';
 	import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 	import { languages } from '@codemirror/language-data';
-	import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
+	import {
+		defaultKeymap,
+		history,
+		historyKeymap,
+		undo as cmUndo,
+		redo as cmRedo
+	} from '@codemirror/commands';
 
 	interface Props {
 		content?: string;
@@ -72,6 +78,18 @@
 			view?.destroy();
 		};
 	});
+
+	export function undo(): void {
+		if (view) cmUndo(view);
+	}
+
+	export function redo(): void {
+		if (view) cmRedo(view);
+	}
+
+	export function getView(): EditorView | undefined {
+		return view;
+	}
 </script>
 
 <div bind:this={editorContainer} class="h-full w-full"></div>
