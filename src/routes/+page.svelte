@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Editor from '$lib/components/Editor.svelte';
+	import Toolbar from '$lib/components/Toolbar.svelte';
 
+	let editor: ReturnType<typeof Editor>;
 	let content = $state('');
 	let wordCount = $derived(content.trim() ? content.trim().split(/\s+/).length : 0);
 	let charCount = $derived(content.length);
@@ -17,12 +19,8 @@
 	</header>
 
 	<main class="min-h-0 flex-1">
-		<Editor {content} onchange={(value) => (content = value)} />
+		<Editor bind:this={editor} {content} onchange={(value) => (content = value)} />
 	</main>
 
-	<footer class="border-t border-gray-200 px-4 py-1.5 text-xs text-gray-500">
-		<span>{wordCount} words</span>
-		<span class="mx-2">|</span>
-		<span>{charCount} chars</span>
-	</footer>
+	<Toolbar onundo={() => editor?.undo()} onredo={() => editor?.redo()} {wordCount} {charCount} />
 </div>
