@@ -1,16 +1,5 @@
-import {
-	type Extension,
-	StateField,
-	StateEffect,
-	type TransactionSpec
-} from '@codemirror/state';
-import {
-	EditorView,
-	Decoration,
-	type DecorationSet,
-	WidgetType,
-	keymap
-} from '@codemirror/view';
+import { type Extension, StateField, StateEffect, type TransactionSpec } from '@codemirror/state';
+import { EditorView, Decoration, type DecorationSet, WidgetType, keymap } from '@codemirror/view';
 import { buildCompletionRequest } from '$lib/ai/completion';
 import { streamCompletion } from '$lib/ai/openrouter';
 

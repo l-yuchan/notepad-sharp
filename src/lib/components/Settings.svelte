@@ -61,7 +61,6 @@
 </script>
 
 {#if open}
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<!-- svelte-ignore a11y_interactive_supports_focus -->
 	<div
 		class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
@@ -132,7 +131,7 @@
 					</div>
 					{#if availableModels.length > 0}
 						<datalist id="model-list">
-							{#each availableModels as m}
+							{#each availableModels as m (m)}
 								<option value={m}></option>
 							{/each}
 						</datalist>
