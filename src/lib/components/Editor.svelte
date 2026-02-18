@@ -11,13 +11,24 @@
 		undo as cmUndo,
 		redo as cmRedo
 	} from '@codemirror/commands';
+	import { ghostTextExtension } from '$lib/editor/ghost-text';
+	import { inlineEditExtension } from '$lib/editor/inline-edit';
 
 	interface Props {
 		content?: string;
 		onchange?: (value: string) => void;
+		onselectionchange?: (hasSelection: boolean, from: number, to: number) => void;
+		getApiKey?: () => string;
+		getModel?: () => string;
 	}
 
-	let { content = '', onchange }: Props = $props();
+	let {
+		content = '',
+		onchange,
+		onselectionchange,
+		getApiKey = () => '',
+		getModel = () => ''
+	}: Props = $props();
 
 	let editorContainer: HTMLDivElement;
 	let view: EditorView | undefined = $state();
@@ -53,6 +64,10 @@
 			if (update.docChanged) {
 				onchange?.(update.state.doc.toString());
 			}
+			if (update.selectionSet || update.docChanged) {
+				const sel = update.state.selection.main;
+				onselectionchange?.(sel.from !== sel.to, sel.from, sel.to);
+			}
 		});
 
 		const state = EditorState.create({
@@ -65,7 +80,9 @@
 				markdown({ base: markdownLanguage, codeLanguages: languages }),
 				updateListener,
 				theme,
-				EditorView.lineWrapping
+				EditorView.lineWrapping,
+				ghostTextExtension({ getApiKey, getModel }),
+				inlineEditExtension()
 			]
 		});
 
